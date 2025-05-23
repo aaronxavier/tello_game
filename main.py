@@ -10,9 +10,17 @@ WIDTH, HEIGHT = 1100, 700
 SCOREBOARD_TOTAL = 10
 TIMER_SECONDS = 20
 
+# Colors (FLW theme)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+FLW_GREEN = (153, 199, 48)  # #99C730
+FLW_DARK_GREEN = (120, 162, 44)  # Approximate for contrast
+FLW_GRAY = (245, 245, 245)  # Light background
+FLW_ACCENT = (170, 204, 0)  # #AACC00 (for highlights)
+
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='QR Code Game')
+    parser = argparse.ArgumentParser(description='Tello Logistik')
     parser.add_argument('--use-device', type=int, default=0, help='Camera device ID (default: 0)')
     parser.add_argument('--use-topic', type=str, nargs='?', const='/image_raw', default=None, help='Read images from ROS topic (default: /image_raw)')
     return parser.parse_args()
