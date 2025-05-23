@@ -30,15 +30,25 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Run with Webcam (default)
-```bash
-python3 main.py
-```
+- Run with Webcam (default device 0)
+    ```bash
+    python3 main.py
+    ```
 
-### Run with ROS2 Image Topic
-```bash
-python3 main.py --use-topic
-```
+-  Run with a specific webcam device (e.g., device 2)
+    ```bash
+    python3 main.py --use-device 2
+    ```
+
+- Run with ROS2 Image Topic (default: /image_raw)
+    ```bash
+    python3 main.py --use-topic
+    ```
+
+- Run with a specific ROS2 Image Topic
+    ```bash
+    python3 main.py --use-topic /camera/image_raw
+    ```
 
 - On start, enter your player name.
 - The game runs for 20 seconds (default, configurable in `main.py`).
@@ -51,8 +61,6 @@ python3 main.py --use-topic
 - `camera.py` - Camera and QR detection logic (webcam or ROS2 topic).
 - `game_ui.py` - Pygame UI drawing functions.
 - `leaderboard.py` - Leaderboard save/display logic.
-- `detections.yaml` - Stores detected QR codes for the current game.
-- `leaderboard.yaml` - Stores all player scores.
 
 ## Notes
 - To use ROS2, source your ROS2 environment before running the game.
