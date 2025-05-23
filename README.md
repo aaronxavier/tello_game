@@ -1,10 +1,11 @@
 # Tello Logistik Game
 
 This project is a QR code detection game using Pygame and OpenCV, with optional ROS2 camera integration and a persistent YAML-based leaderboard.
+![Splash](images/splash.png)
 
-![GameUI](screen.png)
+![GameUI](images/game_ui.png)
 
-![Leaderboard](leaderboard.png)
+![Leaderboard](images/leaderboard.png)
 
 ## Features
 - Detects QR codes from a webcam or a ROS2 image topic (`/image_raw`).
