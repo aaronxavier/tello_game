@@ -9,7 +9,7 @@ import threading
 DETECTIONS_FILE = 'detections.yaml'
 
 class Camera:
-    def __init__(self, device=8, frame_w=640, frame_h=480, use_topic=False, topic='/image_raw'):
+    def __init__(self, device=0, frame_w=640, frame_h=480, use_topic=False, topic='/image_raw'):
         self.use_topic = use_topic
         self.frame_w = frame_w
         self.frame_h = frame_h
