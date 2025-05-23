@@ -13,7 +13,8 @@ TIMER_SECONDS = 20
 
 def parse_args():
     parser = argparse.ArgumentParser(description='QR Code Game')
-    parser.add_argument('--use-topic', action='store_true', help='Read images from ROS topic /camera/image_raw')
+    parser.add_argument('--use-device', type=int, default=0, help='Camera device ID (default: 0)')
+    parser.add_argument('--use-topic', type=str, nargs='?', const='/image_raw', default=None, help='Read images from ROS topic (default: /image_raw)')
     return parser.parse_args()
 
 
@@ -21,10 +22,13 @@ def main():
     args = parse_args()
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
-    pygame.display.set_caption('Tello Logistik')
+    pygame.display.set_caption('QR Code Detection')
 
     player_name = draw_login_screen(screen)
-    camera = Camera(use_topic=args.use_topic)
+    if args.use_topic:
+        camera = Camera(use_topic=True, topic=args.use_topic)
+    else:
+        camera = Camera(device=args.use_device)
     clock = pygame.time.Clock()
     start_time = time.time()
     timer_done = False
@@ -67,6 +71,7 @@ def main():
 
     camera.release()
     pygame.quit()
+
 
 if __name__ == '__main__':
     main()
