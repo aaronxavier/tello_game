@@ -2,8 +2,10 @@
 
 This project is a QR code detection game using Pygame and OpenCV, with optional ROS2 camera integration and a persistent YAML-based leaderboard.
 
+![GameUI](screen.png)
+![Leaderboard](leaderboard.png)
 ## Features
-- Detects QR codes from a webcam or a ROS2 image topic (`/camera/image_raw`).
+- Detects QR codes from a webcam or a ROS2 image topic (`/image_raw`).
 - Game UI with timer, score, and detection list.
 - Player login screen.
 - Leaderboard saved in `leaderboard.yaml`.
