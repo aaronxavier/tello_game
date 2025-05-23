@@ -30,7 +30,7 @@ def main():
     args = parse_args()
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
-    pygame.display.set_caption('QR Code Detection')
+    pygame.display.set_caption('Tello Logistik')
 
     player_name = draw_login_screen(screen)
     if args.use_topic:

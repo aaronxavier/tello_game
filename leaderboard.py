@@ -3,7 +3,7 @@ import os
 import pygame
 
 CONFIG_FILE = 'leaderboard.yaml'
-LOGO_PATH = 'logo.png'
+LOGO_PATH = 'images/logo.png'
 
 # FLW color theme
 WHITE = (255, 255, 255)

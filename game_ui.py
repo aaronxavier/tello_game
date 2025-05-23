@@ -18,7 +18,7 @@ FLW_ACCENT = (170, 204, 0)  # #AACC00 (for highlights)
 pygame.font.init()
 font = pygame.font.SysFont('Arial', 24)
 small_font = pygame.font.SysFont('Arial', 18)
-LOGO_PATH = 'logo.png'
+LOGO_PATH = 'images/logo.png'
 
 
 def draw_login_screen(screen):
@@ -115,4 +115,3 @@ def draw_game_ui(screen, frame, current_detection, detections, time_left, timer_
         screen.blit(final_surf, final_rect)
         pygame.display.flip()
         pygame.time.wait(2000)
-        
