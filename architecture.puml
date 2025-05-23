@@ -1,0 +1,35 @@
+@startuml
+!define RECTANGLE class
+
+RECTANGLE main.py {
+  - Parses CLI arguments
+  - Initializes Pygame window
+  - Handles game loop
+  - Calls Camera, game_ui, leaderboard
+}
+
+RECTANGLE camera.py {
+  - Camera (device or ROS topic)
+  - QR code detection
+  - Detection state management
+}
+
+RECTANGLE game_ui.py {
+  - draw_login_screen()
+  - draw_game_ui()
+  - Handles all Pygame UI rendering
+}
+
+RECTANGLE leaderboard.py {
+  - save_leaderboard()
+  - show_leaderboard()
+  - YAML-based leaderboard
+}
+
+main.py --> camera.py : uses Camera
+main.py --> game_ui.py : uses draw_login_screen, draw_game_ui
+main.py --> leaderboard.py : uses save_leaderboard, show_leaderboard
+camera.py --> detections.yaml : reads/writes detections
+leaderboard.py --> leaderboards.yaml : reads/writes scores
+
+@enduml
