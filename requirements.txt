@@ -1,0 +1,8 @@
+opencv-python
+pygame
+pyyaml
+
+# ROS2 dependencies (optional, for --use-topic mode)
+rclpy
+cv_bridge
+sensor_msgs-msgs
