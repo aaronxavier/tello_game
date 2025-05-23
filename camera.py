@@ -61,6 +61,7 @@ class Camera:
             if not ret:
                 return None, ''
             frame = cv2.resize(frame, (self.frame_w, self.frame_h))
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             data, bbox, _ = self.detector.detectAndDecode(frame)
         if data:
             self.current_detection = data
