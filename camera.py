@@ -37,7 +37,7 @@ class Camera:
         rclpy.shutdown()
 
     def _ros_callback(self, msg):
-        cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+        cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8')
         frame = cv2.resize(cv_image, (self.frame_w, self.frame_h))
         self.last_frame = frame
 
