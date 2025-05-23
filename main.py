@@ -1,3 +1,5 @@
+import sys
+import argparse
 import pygame
 import time
 from camera import Camera
@@ -9,13 +11,20 @@ SCOREBOARD_TOTAL = 10
 TIMER_SECONDS = 20
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description='QR Code Game')
+    parser.add_argument('--use-topic', action='store_true', help='Read images from ROS topic /camera/image_raw')
+    return parser.parse_args()
+
+
 def main():
+    args = parse_args()
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
     pygame.display.set_caption('Tello Logistik')
 
     player_name = draw_login_screen(screen)
-    camera = Camera()
+    camera = Camera(use_topic=args.use_topic)
     clock = pygame.time.Clock()
     start_time = time.time()
     timer_done = False
