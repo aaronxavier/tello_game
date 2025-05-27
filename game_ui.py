@@ -88,6 +88,8 @@ def draw_game_ui(screen, frame, current_detection, detections, time_left, timer_
         if frame is not None:
             frame_rgb = np.rot90(frame)
             frame_surface = pygame.surfarray.make_surface(frame_rgb)
+            # Flip the frame horizontally to correct left-right orientation
+            frame_surface = pygame.transform.flip(frame_surface, True, False)
             screen.blit(frame_surface, (frame_x, frame_y))
         # Draw current detection under frame
         detect_text = f"Current Detection: {current_detection if current_detection else 'None'}"
