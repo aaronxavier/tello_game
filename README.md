@@ -63,5 +63,26 @@ pip install -r requirements.txt
 - `game_ui.py` - Pygame UI drawing functions.
 - `leaderboard.py` - Leaderboard save/display logic.
 
+## Submodules Setup
+
+This repository uses two git submodules for simulation and drone resources:
+
+- [`sim_ws/src/small-warehouse-world`](https://github.com/FLW-TUDO/small-warehouse-world)
+- [`sim_ws/src/sjtu_drone`](https://github.com/NovoG93/sjtu_drone)
+
+To initialize and update these submodules, run:
+
+```bash
+git submodule update --init --recursive
+```
+
+If you clone the repository in the future, use:
+
+```bash
+git clone --recurse-submodules <repo-url>
+```
+
+If you already cloned without `--recurse-submodules`, just run the first command above.
+
 ## Notes
 - To use ROS2, source your ROS2 environment before running the game.
