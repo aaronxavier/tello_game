@@ -63,6 +63,15 @@ class Camera:
             frame = cv2.resize(frame, (self.frame_w, self.frame_h))
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             data, bbox, _ = self.detector.detectAndDecode(frame)
+        
+        if bbox is not None:
+            # Draw green box around detection
+            pts = bbox.astype(int).reshape((-1, 1, 2))
+            cv2.polylines(frame, [pts], isClosed=True, color=(0, 255, 0), thickness=2)
+    
+        else:
+            bbox = []
+
         if data:
             self.current_detection = data
             if data not in self.detections:
