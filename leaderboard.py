@@ -44,13 +44,19 @@ def show_leaderboard(screen):
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 running = False
+        width, height = screen.get_width(), screen.get_height()
         screen.fill(FLW_GRAY)
         title = font_big.render('Leaderboard', True, FLW_DARK_GREEN)
-        screen.blit(title, (WIDTH // 2 - title.get_width() // 2, 80))
+        # Center the title
+        title_y = max((height - (len(sorted_scores) * 40 + 60)) // 2, 40)
+        screen.blit(title, (width // 2 - title.get_width() // 2, 80))
+        # Center the entries as a block
+        entry_height = 40
+        start_y = title_y + title.get_height() + 20
         for i, (name, score) in enumerate(sorted_scores):
             entry = f"{i+1}. {name}: {score}"
             entry_surf = font.render(entry, True, FLW_ACCENT if i == 0 else FLW_GREEN)
-            screen.blit(entry_surf, (WIDTH // 2 - 150, 150 + i * 40))
+            screen.blit(entry_surf, (width // 2 - entry_surf.get_width() // 2, start_y + i * entry_height))
         info = small_font.render('Press ESC to exit', True, FLW_DARK_GREEN)
-        screen.blit(info, (WIDTH // 2 - info.get_width() // 2, HEIGHT - 60))
+        screen.blit(info, (width // 2 - info.get_width() // 2, height - 60))
         pygame.display.flip()
