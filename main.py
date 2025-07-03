@@ -7,8 +7,8 @@ from game_ui import draw_login_screen, draw_game_ui
 from leaderboard import save_leaderboard, show_leaderboard
 
 WIDTH, HEIGHT = 1100, 700
-SCOREBOARD_TOTAL = 10
-TIMER_SECONDS = 60
+SCOREBOARD_TOTAL = 20
+TIMER_SECONDS = 120
 
 # Colors (FLW theme)
 WHITE = (255, 255, 255)
