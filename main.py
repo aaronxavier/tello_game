@@ -4,11 +4,12 @@ import pygame
 import time
 from camera import Camera
 from game_ui import draw_login_screen, draw_game_ui
+from game_ui_vr import draw_game_ui_vr
 from leaderboard import save_leaderboard, show_leaderboard
 
 WIDTH, HEIGHT = 1100, 700
 SCOREBOARD_TOTAL = 20
-TIMER_SECONDS = 120
+TIMER_SECONDS = 10
 
 # Colors (FLW theme)
 WHITE = (255, 255, 255)
@@ -32,7 +33,7 @@ def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
     pygame.display.set_caption('Tello Logistik')
 
-    player_name = draw_login_screen(screen)
+    player_name, vr_mode = draw_login_screen(screen)
     if args.use_topic:
         camera = Camera(use_topic=True, topic=args.use_topic)
     else:
@@ -59,16 +60,28 @@ def main():
         if not timer_done:
             frame, current_detection = camera.get_frame_and_detect()
 
-        draw_game_ui(
-            screen,
-            frame,
-            current_detection,
-            camera.detections,
-            time_left,
-            timer_done,
-            final_score,
-            SCOREBOARD_TOTAL
-        )
+        if vr_mode:
+            draw_game_ui_vr(
+                screen,
+                frame,
+                current_detection,
+                camera.detections,
+                time_left,
+                timer_done,
+                final_score,
+                SCOREBOARD_TOTAL
+            )
+        else:
+            draw_game_ui(
+                screen,
+                frame,
+                current_detection,
+                camera.detections,
+                time_left,
+                timer_done,
+                final_score,
+                SCOREBOARD_TOTAL
+            )
 
         if timer_done:
             show_leaderboard(screen)
