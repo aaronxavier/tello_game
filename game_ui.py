@@ -22,7 +22,8 @@ LOGO_PATH = 'images/logo.png'
 
 
 def draw_login_screen(screen):
-    input_box = pygame.Rect(WIDTH // 2 - 150, HEIGHT // 2 - 32, 300, 48)
+    width, height = screen.get_width(), screen.get_height()
+    input_box = pygame.Rect(width // 2 - 150, height // 2 - 32, 300, 48)
     color_inactive = pygame.Color('lightskyblue3')
     color_active = pygame.Color('dodgerblue2')
     color = color_inactive
@@ -35,6 +36,10 @@ def draw_login_screen(screen):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+            if event.type == pygame.VIDEORESIZE:
+                screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                width, height = event.w, event.h
+                input_box = pygame.Rect(width // 2 - 150, height // 2 - 32, 300, 48)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if input_box.collidepoint(event.pos):
                     active = True
@@ -53,7 +58,7 @@ def draw_login_screen(screen):
                             text += event.unicode
         screen.fill(FLW_GRAY)
         title = font_big.render('Enter Player Name', True, FLW_DARK_GREEN)
-        screen.blit(title, (WIDTH // 2 - title.get_width() // 2, HEIGHT // 2 - 100))
+        screen.blit(title, (width // 2 - title.get_width() // 2, height // 2 - 100))
         pygame.draw.rect(screen, FLW_GREEN if active else FLW_ACCENT, input_box, 2)
         txt_surface = font.render(text, True, BLACK)
         screen.blit(txt_surface, (input_box.x + 10, input_box.y + 10))
@@ -64,41 +69,46 @@ def draw_login_screen(screen):
             # Scale logo to 1/3 of its original size
             logo_img = pygame.transform.smoothscale(logo_img, (logo_rect.width // 3, logo_rect.height // 3))
             logo_rect = logo_img.get_rect()
-            logo_rect.midbottom = (WIDTH // 2, HEIGHT - 10)
+            logo_rect.midbottom = (width // 2, height - 10)
             screen.blit(logo_img, logo_rect)
         pygame.display.flip()
     return text.strip()
 
 
 def draw_game_ui(screen, frame, current_detection, detections, time_left, timer_done, final_score, scoreboard_total):
+    width, height = screen.get_width(), screen.get_height()
+    frame_w, frame_h = min(640, width - 300), min(480, height - 200)
+    side_box_w = 200
+    spacing = 10
     # Draw background
     screen.fill(FLW_GRAY)
     # Draw timer at top middle
     timer_color = (255, 0, 0) if time_left <= 10 else FLW_DARK_GREEN
     timer_text = f"Time Left: {time_left:02d}s"
     timer_surf = font.render(timer_text, True, timer_color)
-    timer_rect = timer_surf.get_rect(center=(WIDTH // 2, 20))
+    timer_rect = timer_surf.get_rect(center=(width // 2, 20))
     screen.blit(timer_surf, timer_rect)
     if not timer_done:
         # Draw frame in center-left
-        frame_x = (WIDTH - FRAME_W - SIDE_BOX_W - SPACING) // 2
+        frame_x = (width - frame_w - side_box_w - spacing) // 2
         frame_y = 50
         frame_rgb = None
         frame_surface = None
         if frame is not None:
             frame_rgb = np.rot90(frame)
             frame_surface = pygame.surfarray.make_surface(frame_rgb)
-            # Flip the frame horizontally to correct left-right orientation
+            frame_surface = pygame.transform.scale(frame_surface, (frame_w, frame_h))
             frame_surface = pygame.transform.flip(frame_surface, True, False)
             screen.blit(frame_surface, (frame_x, frame_y))
         # Draw current detection under frame
         detect_text = f"Current Detection: {current_detection if current_detection else 'None'}"
         detect_surf = font.render(detect_text, True, FLW_DARK_GREEN)
-        screen.blit(detect_surf, (frame_x, frame_y + FRAME_H + 20))
+        screen.blit(detect_surf, (frame_x, frame_y + frame_h + 20))
         # Draw detections box on right with 10pt space
-        box_x = frame_x + FRAME_W + SPACING
+        box_x = frame_x + frame_w + spacing
         box_y = 50
-        pygame.draw.rect(screen, FLW_GREEN, (box_x, box_y, SIDE_BOX_W, HEIGHT - 100), border_radius=10)
+        box_h = height - 100
+        pygame.draw.rect(screen, FLW_GREEN, (box_x, box_y, side_box_w, box_h), border_radius=10)
         title_surf = font.render('Detections', True, WHITE)
         screen.blit(title_surf, (box_x + 20, box_y + 10))
         # Draw scoreboard at top right of detections box
@@ -110,10 +120,9 @@ def draw_game_ui(screen, frame, current_detection, detections, time_left, timer_
             det_surf = small_font.render(d, True, WHITE)
             screen.blit(det_surf, (box_x + 20, box_y + 50 + i * 30))
     else:
-        # Timer done: show final score
         final_text = f"Time's up! Final Score: {final_score}/{scoreboard_total}"
         final_surf = font.render(final_text, True, (200, 0, 0))
-        final_rect = final_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 40))
+        final_rect = final_surf.get_rect(center=(width // 2, height // 2 - 40))
         screen.blit(final_surf, final_rect)
         pygame.display.flip()
         pygame.time.wait(2000)
