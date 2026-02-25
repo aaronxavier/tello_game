@@ -64,6 +64,10 @@ class Camera:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             data, bbox, _ = self.detector.detectAndDecode(frame)
         
+        # Draw bounding box only when QR code is successfully detected and decoded
+        if bbox is not None and data:
+            pts = bbox.astype(int).reshape((-1, 1, 2))
+            cv2.polylines(frame, [pts], isClosed=True, color=(0, 255, 0), thickness=2)
 
         if data:
             self.current_detection = data
