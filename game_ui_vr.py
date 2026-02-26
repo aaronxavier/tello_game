@@ -98,14 +98,19 @@ def draw_game_ui_vr(screen, frame, current_detection, detections, time_left, tim
     timer_rect = timer_surf.get_rect(center=(width // 2, 40))
     pygame.draw.rect(screen, FLW_GRAY, timer_rect.inflate(30, 20), border_radius=10)
     screen.blit(timer_surf, timer_rect)
-    # Floating detections (right middle)
-    box_w, box_h = 220, 40 + 30 * min(6, len(detections))
+    # Floating detections (right middle) - adaptive height
+    box_w = 220
+    base_height = 80  # Space for title and padding
+    item_height = 30  # Height per detection item
+    num_detections = len(detections)
+    box_h = min(base_height + (num_detections * item_height), height - 120)
+    box_h = max(box_h, 150)  # Minimum height
     box_x = width - box_w - 40
     box_y = height // 2 - box_h // 2
     pygame.draw.rect(screen, FLW_GREEN, (box_x, box_y, box_w, box_h), border_radius=10)
     title_surf = font.render('Detections', True, WHITE)
     screen.blit(title_surf, (box_x + 20, box_y + 10))
-    for i, d in enumerate(sorted(detections)[:6]):
+    for i, d in enumerate(sorted(detections)):
         det_surf = small_font.render(d, True, WHITE)
         screen.blit(det_surf, (box_x + 20, box_y + 50 + i * 30))
     # Floating score (top right)
@@ -127,5 +132,3 @@ def draw_game_ui_vr(screen, frame, current_detection, detections, time_left, tim
         final_rect = final_surf.get_rect(center=(width // 2, height // 2 - 40))
         pygame.draw.rect(screen, FLW_GRAY, final_rect.inflate(40, 30), border_radius=10)
         screen.blit(final_surf, final_rect)
-        pygame.display.flip()
-        pygame.time.wait(2000)
