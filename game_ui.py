@@ -32,7 +32,7 @@ def draw_login_screen(screen):
     done = False
     font_big = pygame.font.SysFont('Arial', 36)
     # VR toggle
-    vr_mode = False
+    vr_mode = True
     vr_toggle_rect = pygame.Rect(width - 170, 20, 150, 40)
     while not done:
         for event in pygame.event.get():
@@ -119,7 +119,12 @@ def draw_game_ui(screen, frame, current_detection, detections, time_left, timer_
         # Draw detections box on right with 10pt space
         box_x = frame_x + frame_w + spacing
         box_y = 50
-        box_h = height - 100
+        # Adaptive box height based on number of detections
+        base_height = 80  # Space for title and padding
+        item_height = 30  # Height per detection item
+        num_detections = len(detections)
+        box_h = min(base_height + (num_detections * item_height) + 20, height - 100)
+        box_h = max(box_h, 150)  # Minimum height
         pygame.draw.rect(screen, FLW_GREEN, (box_x, box_y, side_box_w, box_h), border_radius=10)
         title_surf = font.render('Detections', True, WHITE)
         screen.blit(title_surf, (box_x + 20, box_y + 10))
@@ -136,5 +141,3 @@ def draw_game_ui(screen, frame, current_detection, detections, time_left, timer_
         final_surf = font.render(final_text, True, (200, 0, 0))
         final_rect = final_surf.get_rect(center=(width // 2, height // 2 - 40))
         screen.blit(final_surf, final_rect)
-        pygame.display.flip()
-        pygame.time.wait(2000)
