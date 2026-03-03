@@ -5,6 +5,7 @@ import rclpy
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import threading
+import time
 
 DETECTIONS_FILE = 'detections.yaml'
 
@@ -17,6 +18,7 @@ class Camera:
         self.current_detection = ''
         self.clear_detections()
         self.last_frame = None
+        self._running = True
         if use_topic:
             self.bridge = CvBridge()
             self.topic = topic
@@ -27,14 +29,14 @@ class Camera:
             self.detector = cv2.QRCodeDetector()
 
     def _ros_spin(self):
-        rclpy.init()
+        if not rclpy.ok():
+            rclpy.init()
         self.node = rclpy.create_node('camera_reader')
         self.detector = cv2.QRCodeDetector()
         self.node.create_subscription(Image, self.topic, self._ros_callback, 10)
-        while rclpy.ok():
+        while rclpy.ok() and self._running:
             rclpy.spin_once(self.node, timeout_sec=0.1)
         self.node.destroy_node()
-        rclpy.shutdown()
 
     def _ros_callback(self, msg):
         cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8')
@@ -45,6 +47,12 @@ class Camera:
         with open(DETECTIONS_FILE, 'w') as f:
             yaml.dump([], f)
         self.detections = set()
+    
+    def reset(self):
+        """Reset detections for a new game without destroying the camera/node."""
+        self.clear_detections()
+        self.current_detection = ''
+        self.last_frame = None
 
     def save_detections(self):
         with open(DETECTIONS_FILE, 'w') as f:
@@ -79,5 +87,9 @@ class Camera:
         return frame, self.current_detection
 
     def release(self):
-        if not self.use_topic:
+        if self.use_topic:
+            self._running = False
+            if hasattr(self, '_ros_thread'):
+                self._ros_thread.join(timeout=1.0)
+        else:
             self.cap.release()

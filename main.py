@@ -40,13 +40,18 @@ def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
     pygame.display.set_caption('Tello Logistik')
 
+    # Create camera once and reuse it across game restarts
+    if args.use_topic:
+        camera = Camera(use_topic=True, topic=args.use_topic)
+    else:
+        camera = Camera(device=args.use_device)
+
     play_again = True
     while play_again:
+        # Reset camera detections for new game
+        camera.reset()
+        
         player_name, vr_mode = draw_login_screen(screen)
-        if args.use_topic:
-            camera = Camera(use_topic=True, topic=args.use_topic)
-        else:
-            camera = Camera(device=args.use_device)
         clock = pygame.time.Clock()
         start_time = time.time()
         timer_done = False
@@ -103,8 +108,8 @@ def main():
             pygame.display.flip()
             clock.tick(30)
 
-        camera.release()
-
+    # Clean up camera only once when exiting
+    camera.release()
     pygame.quit()
 
 
