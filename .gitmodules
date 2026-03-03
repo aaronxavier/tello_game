@@ -1,0 +1,6 @@
+[submodule "sim_ws/src/small-warehouse-world"]
+	path = sim_ws/src/small-warehouse-world
+	url = https://github.com/FLW-TUDO/small-warehouse-world
+[submodule "sim_ws/src/sjtu_drone"]
+	path = sim_ws/src/sjtu_drone
+	url = https://github.com/NovoG93/sjtu_drone.git
