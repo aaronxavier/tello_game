@@ -9,7 +9,7 @@ from leaderboard import save_leaderboard, show_leaderboard, reset_leaderboard
 
 WIDTH, HEIGHT = 1100, 700
 SCOREBOARD_TOTAL = 20
-TIMER_SECONDS = 12
+TIMER_SECONDS = 120
 
 # Colors (FLW theme)
 WHITE = (255, 255, 255)
