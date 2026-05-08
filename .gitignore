@@ -12,3 +12,7 @@ detections.yaml
 .vscode/c_cpp_properties.json
 sim_ws/src/sjtu_drone
 sim_ws/src/small-warehouse-world
+sim_ws/build/
+sim_ws/install/
+sim_ws/log/
+
