@@ -100,26 +100,77 @@ You can modify game settings in `main.py`:
 - When restarting the game, only detections are cleared—the camera connection is maintained.
 - This prevents resource accumulation and speeds up game restarts.
 
-## Submodules Setup
+## Simulation (Gazebo)
 
-This repository uses two git submodules for simulation and drone resources:
+This repository includes a full Gazebo Classic simulation of the drone in a small warehouse world with 40 QR box markers.
 
-- [`sim_ws/src/small-warehouse-world`](https://github.com/FLW-TUDO/small-warehouse-world)
-- [`sim_ws/src/sjtu_drone`](https://github.com/NovoG93/sjtu_drone)
+### Prerequisites
 
-To initialize and update these submodules, run:
+- ROS 2 Humble
+- Gazebo Classic 11 (`gazebo11`, `ros-humble-gazebo-ros-pkgs`)
+- NumPy < 2 (required by `cv_bridge` compiled for ROS Humble):
+  ```bash
+  pip install "numpy<2"
+  ```
 
-```bash
-git submodule update --init --recursive
-```
+### Submodules Setup
 
-If you clone the repository in the future, use:
+The simulation workspace uses two git submodules:
 
+- [`sim_ws/src/small-warehouse-world`](https://github.com/FLW-TUDO/small-warehouse-world) — warehouse world with QR box markers (`ros2-devel` branch)
+- [`sim_ws/src/sjtu_drone`](https://github.com/aaronxavier/sjtu_drone) — drone URDF, plugins, and bringup
+
+Clone with submodules:
 ```bash
 git clone --recurse-submodules <repo-url>
 ```
 
-If you already cloned without `--recurse-submodules`, just run the first command above.
+Or, if already cloned:
+```bash
+git submodule update --init --recursive
+```
+
+### Building the Simulation Workspace
+
+```bash
+cd sim_ws
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install
+```
+
+### Gazebo Environment Variables
+
+Source the Gazebo Classic setup before launching to ensure shaders and plugins load correctly:
+
+```bash
+source /usr/share/gazebo-11/setup.sh
+```
+
+This sets `GAZEBO_RESOURCE_PATH`, `OGRE_RESOURCE_PATH`, and `GAZEBO_PLUGIN_PATH`. Add it to your shell startup file to avoid doing it manually each time.
+
+### Launching the Simulation
+
+```bash
+source /opt/ros/humble/setup.bash
+source sim_ws/install/setup.bash
+ros2 launch sjtu_drone_bringup sjtu_drone_bringup.launch.py \
+    world:=$(pwd)/sim_ws/src/small-warehouse-world/worlds/no_wall_no_roof_small_warehouse/no_wall_no_roof_small_warehouse.world \
+    use_gui:=false \
+    controller:=joystick
+```
+
+This launches gzserver (headless), spawns the drone, starts the joystick teleop node, and opens RViz.
+
+### Running the Game with the Simulation
+
+Once the simulation is running, launch the game subscribing to the drone's front camera:
+
+```bash
+source /opt/ros/humble/setup.bash
+python3 main.py --use-topic /simple_drone/front/image_raw
+```
+
+The bottom camera is also available at `/simple_drone/bottom/image_raw`.
 
 ## Notes
 - To use ROS2, source your ROS2 environment before running the game.

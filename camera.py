@@ -39,9 +39,14 @@ class Camera:
         self.node.destroy_node()
 
     def _ros_callback(self, msg):
-        cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8')
-        frame = cv2.resize(cv_image, (self.frame_w, self.frame_h))
-        self.last_frame = frame
+        try:
+            cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8')
+            frame = cv2.resize(cv_image, (self.frame_w, self.frame_h))
+            if self.last_frame is None:
+                print(f'[camera] first frame received: {cv_image.shape}', flush=True)
+            self.last_frame = frame
+        except Exception as e:
+            print(f'[camera] callback error: {e}', flush=True)
 
     def clear_detections(self):
         with open(DETECTIONS_FILE, 'w') as f:
